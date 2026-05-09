@@ -6,6 +6,15 @@ This project contains a **Node.js (TypeScript + tsx)** generator that fetches 61
 
 ---
 
+## 🎨 Discovering Theme Motifs & Palettes
+
+To explore the rich nature-inspired color schemes and find your favorite motif:
+1. Visit the official **[Morphos Catalog Website](https://morphos.ameyanagi.com)**.
+2. Search through the 610+ gorgeous motifs (animals, plants, minerals, weather, and landscapes).
+3. Identify the name of the motif you love, then select the corresponding **`Morphous <Motif Name>`** theme in your editor!
+
+---
+
 ## 🌿 Core Concept
 
 This extension maps the color roles of the Morphos design system to VSCode workbench elements and TextMate syntax scopes to maintain contrast and legibility.
