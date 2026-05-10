@@ -62,18 +62,7 @@ The **Boosted** (`-boosted`) variants increase contrast and adjust lightness lev
 
 ## Installation & Local Usage
 
-Install the published extension from the VS Code Marketplace once available, or build a local VSIX from this fork:
-
-```bash
-bun install
-bun run package
-```
-
-Then install the generated package:
-
-```bash
-code --install-extension dist/morphos-vscode-theme-1.0.0.vsix
-```
+Install the published extension from the VS Code Marketplace once available, or install a locally built VSIX from this fork.
 
 For compatible editors such as Cursor or VSCodium, install the same VSIX through the editor's extension UI or command-line extension installer.
 
@@ -81,74 +70,9 @@ After installation, press `Cmd+K` then `Cmd+T` (or `Ctrl+K` `Ctrl+T`) to open th
 
 ---
 
-## Generator & Developer Guide
+## Development
 
-This fork uses Bun. Generated theme JSON is written to `dist/` at build time instead of being committed as source.
-
-### 1. Install Dependencies
-
-```bash
-bun install
-```
-
-### 2. Run Theme Generator
-
-```bash
-bun run generate
-```
-
-### 3. Run Validation Tests
-
-```bash
-bun run test
-```
-
-### 4. Typecheck
-
-```bash
-bun run typecheck
-```
-
-### 5. Package VSIX
-
-```bash
-bun run package
-```
-
----
-
-## Under the Hood (Technical Architecture)
-
-- **Morphos Git Repository Source**: The generator reads `src/data/systems.json` from the Morphos git repository. If `../morphos` exists locally, it uses `git show`; otherwise it uses a sparse, filtered clone of `https://github.com/Ameyanagi/morphos.git`.
-- **Generated Extension Output**: `dist/package.json` receives the complete VSCode `contributes.themes` list, and `dist/themes/` receives the generated theme JSON files.
-- **On-Demand Loading**: VSCode and compatible editors load active themes dynamically from disk, ensuring that hosting over 2,400 themes incurs zero performance overhead on startup or memory footprint.
-- **TypeScript Implementation**: The generator is written in TypeScript and executed by Bun.
-
-Environment overrides:
-
-```bash
-MORPHOUS_REPO_PATH=../morphos bun run generate
-MORPHOUS_REPO_URL=https://github.com/Ameyanagi/morphos.git MORPHOUS_REF=main bun run generate
-```
-
----
-
-## GitHub Actions Publishing
-
-Add a repository secret named `VSCE_PAT` with an Azure DevOps Personal Access Token that has:
-
-```text
-Organization: All accessible organizations
-Scope: Marketplace -> Manage
-```
-
-Then run the manual workflow:
-
-```text
-Actions -> Publish VS Code Extension -> Run workflow
-```
-
-Use `skip_publish=true` to build, upload the VSIX artifact, and verify the Marketplace PAT without publishing. By default, the workflow generates themes from `https://github.com/Ameyanagi/morphos.git` at `main`.
+Development, generation, and publishing notes live in [DEVELOPMENT.md](DEVELOPMENT.md).
 
 ---
 
