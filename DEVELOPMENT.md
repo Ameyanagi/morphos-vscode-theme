@@ -1,6 +1,6 @@
 # Development
 
-This fork uses Bun. Generated theme JSON is written to `dist/` at build time instead of being committed as source.
+This fork uses Bun. Generated theme JSON is written to `dist/` and committed so tags contain the exact theme files being published.
 
 ## Commands
 
@@ -52,18 +52,6 @@ Package a VSIX:
 bun run package
 ```
 
-## Pre-commit Hook
-
-`bun install` runs Husky through the `prepare` script and installs the tracked pre-commit hook.
-
-The hook runs:
-
-```bash
-bun run precommit
-```
-
-That command regenerates the theme into `dist/`, checks source formatting with Oxfmt, lints with Oxlint, typechecks, and validates generated theme metadata.
-
 ## Source Data
 
 The generator reads `src/data/systems.json` from the Morphos git repository. If `../morphos` exists locally, it uses `git show`; otherwise it uses a sparse, filtered clone of `https://github.com/Ameyanagi/morphos.git`.
@@ -92,10 +80,11 @@ Organization: All accessible organizations
 Scope: Marketplace -> Manage
 ```
 
-Then run the manual workflow:
+Publishing runs from git tags only. To publish a release, commit the generated `dist/` output, create a version tag, and push the tag:
 
-```text
-Actions -> Publish VS Code Extension -> Run workflow
+```bash
+git tag v1.0.0
+git push origin v1.0.0
 ```
 
-Use `skip_publish=true` to build, upload the VSIX artifact, and verify the Marketplace PAT without publishing. By default, the workflow generates themes from `https://github.com/Ameyanagi/morphos.git` at `main`.
+The manual workflow also requires a tag input and checks out that tag before building. Use `skip_publish=true` to build, upload the VSIX artifact, and verify the Marketplace PAT without publishing. The workflow regenerates `dist/` before packaging and fails if the generated files differ from the committed tag.

@@ -18,8 +18,6 @@
     "format": "oxfmt --write src",
     "format:check": "oxfmt --check src",
     "lint": "oxlint src --deny-warnings",
-    "precommit": "bun run generate && bun run format:check && bun run lint && bun run typecheck && bun run test",
-    "prepare": "husky",
     "test": "bun src/generate.test.ts",
     "typecheck": "tsc --noEmit",
     "package": "bun run generate && cd dist && ../node_modules/.bin/vsce package"
@@ -27,7 +25,6 @@
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@vscode/vsce": "^3.6.0",
-    "husky": "^9.1.7",
     "oxfmt": "^0.48.0",
     "oxlint": "^1.63.0",
     "typescript": "^5.3.0"

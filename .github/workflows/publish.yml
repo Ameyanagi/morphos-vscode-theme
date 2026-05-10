@@ -1,8 +1,14 @@
 name: Publish VS Code Extension
 
 on:
+  push:
+    tags:
+      - "v*"
   workflow_dispatch:
     inputs:
+      tag:
+        description: "Git tag to publish, for example v1.0.0"
+        required: true
       morphous_ref:
         description: "Morphos git ref to generate themes from"
         required: true
@@ -29,11 +35,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MORPHOUS_REPO_URL: https://github.com/Ameyanagi/morphos.git
-      MORPHOUS_REF: ${{ inputs.morphous_ref }}
+      MORPHOUS_REF: ${{ github.event_name == 'workflow_dispatch' && inputs.morphous_ref || 'main' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          fetch-depth: 0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -42,6 +51,21 @@ jobs:
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
+
+      - name: Ensure publish ref is a tag
+        run: |
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            test -n "${{ inputs.tag }}"
+            git rev-parse -q --verify "refs/tags/${{ inputs.tag }}"
+          else
+            test "${GITHUB_REF_TYPE}" = "tag"
+          fi
+
+      - name: Generate committed themes
+        run: bun run generate
+
+      - name: Verify generated themes are committed
+        run: git diff --exit-code -- dist
 
       - name: Typecheck
         run: bun run typecheck
@@ -67,7 +91,7 @@ jobs:
           ./node_modules/.bin/vsce verify-pat Ameyanagi --pat "$VSCE_PAT"
 
       - name: Publish to VS Code Marketplace
-        if: ${{ inputs.skip_publish == false }}
+        if: ${{ github.event_name == 'push' || inputs.skip_publish == false }}
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
