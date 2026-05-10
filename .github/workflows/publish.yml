@@ -1,0 +1,74 @@
+name: Publish VS Code Extension
+
+on:
+  workflow_dispatch:
+    inputs:
+      morphous_ref:
+        description: "Morphos git ref to generate themes from"
+        required: true
+        default: "main"
+      skip_publish:
+        description: "Build and upload the VSIX without publishing"
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vscode-marketplace-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Build and publish VSIX
+    runs-on: ubuntu-latest
+    env:
+      MORPHOUS_REPO_URL: https://github.com/Ameyanagi/morphos.git
+      MORPHOUS_REF: ${{ inputs.morphous_ref }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Validate generated themes
+        run: bun run test
+
+      - name: Package VSIX
+        run: bun run package
+
+      - name: Upload VSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: morphos-vscode-theme-vsix
+          path: dist/*.vsix
+          if-no-files-found: error
+
+      - name: Verify Marketplace PAT
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          test -n "$VSCE_PAT"
+          ./node_modules/.bin/vsce verify-pat Ameyanagi --pat "$VSCE_PAT"
+
+      - name: Publish to VS Code Marketplace
+        if: ${{ inputs.skip_publish == false }}
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          test -n "$VSCE_PAT"
+          vsix_path="$(find dist -maxdepth 1 -name '*.vsix' -print -quit)"
+          test -n "$vsix_path"
+          ./node_modules/.bin/vsce publish --pat "$VSCE_PAT" -i "$vsix_path"

@@ -60,8 +60,9 @@ web_modules/
 .rts2_cache_cjs/
 .rts2_cache_amd/
 
-# Output of 'npm pack'
+# Output of package builds
 *.tgz
+*.vsix
 
 # Yarn Integrity file
 .yarn-integrity
@@ -76,6 +77,8 @@ web_modules/
 
 # Build directories
 dist/
+/dist/
+/themes/
 
 # parcel-cache
 .cache
