@@ -16,6 +16,24 @@ Run the theme generator:
 bun run generate
 ```
 
+Format TypeScript sources:
+
+```bash
+bun run format
+```
+
+Check formatting:
+
+```bash
+bun run format:check
+```
+
+Lint:
+
+```bash
+bun run lint
+```
+
 Validate generated themes:
 
 ```bash
@@ -33,6 +51,18 @@ Package a VSIX:
 ```bash
 bun run package
 ```
+
+## Pre-commit Hook
+
+`bun install` runs Husky through the `prepare` script and installs the tracked pre-commit hook.
+
+The hook runs:
+
+```bash
+bun run precommit
+```
+
+That command regenerates the theme into `dist/`, checks source formatting with Oxfmt, lints with Oxlint, typechecks, and validates generated theme metadata.
 
 ## Source Data
 

@@ -61,46 +61,102 @@ const roleDefinitions: RoleDefinition[] = [
   {
     key: "secondary",
     aliases: ["Secondary", "Support", "Tertiary", "Focus", "Ring", "Active"],
-    fallbackIndex: 3
+    fallbackIndex: 3,
   },
   {
     key: "accent",
     aliases: ["Accent", "Highlight", "Glow", "Data", "Warm Accent", "Soft Accent"],
-    fallbackIndex: 4
+    fallbackIndex: 4,
   },
   {
     key: "signal",
-    aliases: ["Signal", "Status", "Warning", "Caution", "Danger", "Alert", "Error", "Risk", "Destructive"],
-    fallbackIndex: 5
+    aliases: [
+      "Signal",
+      "Status",
+      "Warning",
+      "Caution",
+      "Danger",
+      "Alert",
+      "Error",
+      "Risk",
+      "Destructive",
+    ],
+    fallbackIndex: 5,
   },
   {
     key: "surface",
-    aliases: ["Surface", "Card", "Panel", "Popover", "Input", "Field", "Command Surface", "Soft Surface"],
-    fallbackIndex: 6
+    aliases: [
+      "Surface",
+      "Card",
+      "Panel",
+      "Popover",
+      "Input",
+      "Field",
+      "Command Surface",
+      "Soft Surface",
+    ],
+    fallbackIndex: 6,
   },
   {
     key: "muted",
-    aliases: ["Muted", "Muted Foreground", "Neutral", "Neutral Mid", "Subtle", "Quiet", "Soft", "Fog", "Mist"],
-    fallbackIndex: 3
+    aliases: [
+      "Muted",
+      "Muted Foreground",
+      "Neutral",
+      "Neutral Mid",
+      "Subtle",
+      "Quiet",
+      "Soft",
+      "Fog",
+      "Mist",
+    ],
+    fallbackIndex: 3,
   },
   {
     key: "depth",
     aliases: ["Depth", "Deep", "Dark Background", "Night", "Shadow", "Dark Card", "Dark Surface"],
-    fallbackIndex: 1
-  }
+    fallbackIndex: 1,
+  },
 ];
 
 const variants = [
-  { mode: "dark" as const, boosted: false, uiTheme: "vs-dark" as const, suffix: "dark", labelMode: "Dark" },
-  { mode: "dark" as const, boosted: true, uiTheme: "vs-dark" as const, suffix: "boosted-dark", labelMode: "Dark" },
-  { mode: "light" as const, boosted: false, uiTheme: "vs-light" as const, suffix: "light", labelMode: "Light" },
-  { mode: "light" as const, boosted: true, uiTheme: "vs-light" as const, suffix: "boosted-light", labelMode: "Light" }
+  {
+    mode: "dark" as const,
+    boosted: false,
+    uiTheme: "vs-dark" as const,
+    suffix: "dark",
+    labelMode: "Dark",
+  },
+  {
+    mode: "dark" as const,
+    boosted: true,
+    uiTheme: "vs-dark" as const,
+    suffix: "boosted-dark",
+    labelMode: "Dark",
+  },
+  {
+    mode: "light" as const,
+    boosted: false,
+    uiTheme: "vs-light" as const,
+    suffix: "light",
+    labelMode: "Light",
+  },
+  {
+    mode: "light" as const,
+    boosted: true,
+    uiTheme: "vs-light" as const,
+    suffix: "boosted-light",
+    labelMode: "Light",
+  },
 ];
 
 export function hexToHsl(hex: string): { h: number; s: number; l: number } {
   hex = hex.replace(/^#/, "");
   if (hex.length === 3) {
-    hex = hex.split("").map((c) => c + c).join("");
+    hex = hex
+      .split("")
+      .map((c) => c + c)
+      .join("");
   }
   const r = parseInt(hex.substring(0, 2), 16) / 255;
   const g = parseInt(hex.substring(2, 4), 16) / 255;
@@ -169,7 +225,7 @@ function git(args: string[], cwd = process.cwd()): string {
   const result = spawnSync("git", args, {
     cwd,
     encoding: "utf8",
-    maxBuffer: GIT_MAX_BUFFER
+    maxBuffer: GIT_MAX_BUFFER,
   });
 
   if (result.error) {
@@ -344,8 +400,8 @@ export function getVSCodeTheme(system: MorphousSystem, mode: ThemeMode, boosted 
     name: `${displayName} (${isDark ? "Dark" : "Light"})`,
     type: mode,
     colors: {
-      "focusBorder": primary,
-      "foreground": fg,
+      focusBorder: primary,
+      foreground: fg,
       "widget.border": border,
       "selection.background": selection,
 
@@ -417,44 +473,71 @@ export function getVSCodeTheme(system: MorphousSystem, mode: ThemeMode, boosted 
       "input.placeholderForeground": `${fg}60`,
       "button.background": primary,
       "button.foreground": bg,
-      "button.hoverBackground": `${primary}dd`
+      "button.hoverBackground": `${primary}dd`,
     },
     tokenColors: [
       {
         scope: ["comment", "punctuation.definition.comment"],
-        settings: { foreground: muted, fontStyle: "italic" }
+        settings: { foreground: muted, fontStyle: "italic" },
       },
       {
-        scope: ["keyword", "keyword.control", "keyword.operator.new", "keyword.operator.expression", "keyword.operator.logical"],
-        settings: { foreground: secondary, fontStyle: "bold" }
+        scope: [
+          "keyword",
+          "keyword.control",
+          "keyword.operator.new",
+          "keyword.operator.expression",
+          "keyword.operator.logical",
+        ],
+        settings: { foreground: secondary, fontStyle: "bold" },
       },
       {
         scope: ["storage.type", "storage.modifier"],
-        settings: { foreground: secondary, fontStyle: "italic" }
+        settings: { foreground: secondary, fontStyle: "italic" },
       },
       {
-        scope: ["entity.name.function", "support.function", "keyword.other.special-method", "meta.function-call"],
-        settings: { foreground: primary }
+        scope: [
+          "entity.name.function",
+          "support.function",
+          "keyword.other.special-method",
+          "meta.function-call",
+        ],
+        settings: { foreground: primary },
       },
       {
-        scope: ["string", "punctuation.definition.string", "string.template", "meta.template.expression"],
-        settings: { foreground: accent }
+        scope: [
+          "string",
+          "punctuation.definition.string",
+          "string.template",
+          "meta.template.expression",
+        ],
+        settings: { foreground: accent },
       },
       {
-        scope: ["constant.numeric", "constant.language", "constant.character", "constant.other", "variable.other.constant"],
-        settings: { foreground: signal }
+        scope: [
+          "constant.numeric",
+          "constant.language",
+          "constant.character",
+          "constant.other",
+          "variable.other.constant",
+        ],
+        settings: { foreground: signal },
       },
       {
         scope: ["variable", "variable.other.readwrite", "variable.other.object"],
-        settings: { foreground: fg }
+        settings: { foreground: fg },
       },
       {
-        scope: ["variable.other.property", "support.variable.property", "meta.object-literal.key", "meta.object.member"],
-        settings: { foreground: fg }
+        scope: [
+          "variable.other.property",
+          "support.variable.property",
+          "meta.object-literal.key",
+          "meta.object.member",
+        ],
+        settings: { foreground: fg },
       },
       {
         scope: ["variable.parameter", "meta.parameter"],
-        settings: { foreground: `${fg}dd`, fontStyle: "italic" }
+        settings: { foreground: `${fg}dd`, fontStyle: "italic" },
       },
       {
         scope: [
@@ -463,13 +546,13 @@ export function getVSCodeTheme(system: MorphousSystem, mode: ThemeMode, boosted 
           "punctuation.definition.parameters",
           "punctuation.definition.block",
           "punctuation.section",
-          "meta.brace"
+          "meta.brace",
         ],
-        settings: { foreground: `${fg}80` }
+        settings: { foreground: `${fg}80` },
       },
       {
         scope: ["keyword.operator"],
-        settings: { foreground: fg }
+        settings: { foreground: fg },
       },
       {
         scope: [
@@ -479,71 +562,71 @@ export function getVSCodeTheme(system: MorphousSystem, mode: ThemeMode, boosted 
           "entity.name.scope-resolution",
           "support.type",
           "support.class",
-          "support.other.namespace"
+          "support.other.namespace",
         ],
-        settings: { foreground: accent, fontStyle: "bold" }
+        settings: { foreground: accent, fontStyle: "bold" },
       },
       {
         scope: ["entity.other.inherited-class"],
-        settings: { foreground: primary }
+        settings: { foreground: primary },
       },
       {
         scope: ["entity.name.tag", "punctuation.definition.tag"],
-        settings: { foreground: secondary }
+        settings: { foreground: secondary },
       },
       {
         scope: ["entity.other.attribute-name"],
-        settings: { foreground: primary }
+        settings: { foreground: primary },
       },
       {
         scope: ["meta.diff", "meta.diff.header"],
-        settings: { foreground: muted }
+        settings: { foreground: muted },
       },
       {
         scope: "markup.deleted",
-        settings: { foreground: signal }
+        settings: { foreground: signal },
       },
       {
         scope: "markup.inserted",
-        settings: { foreground: primary }
+        settings: { foreground: primary },
       },
       {
         scope: "markup.changed",
-        settings: { foreground: accent }
+        settings: { foreground: accent },
       },
       {
         scope: ["markup.heading", "markup.heading.setext", "punctuation.definition.heading"],
-        settings: { foreground: primary, fontStyle: "bold" }
+        settings: { foreground: primary, fontStyle: "bold" },
       },
       {
         scope: "markup.bold",
-        settings: { fontStyle: "bold" }
+        settings: { fontStyle: "bold" },
       },
       {
         scope: "markup.italic",
-        settings: { fontStyle: "italic" }
+        settings: { fontStyle: "italic" },
       },
       {
         scope: ["markup.inline.raw", "markup.raw.block"],
-        settings: { foreground: accent }
+        settings: { foreground: accent },
       },
       {
         scope: ["string.other.link.title", "string.other.link.description"],
-        settings: { foreground: primary }
+        settings: { foreground: primary },
       },
       {
         scope: "markup.underline.link",
-        settings: { foreground: muted, fontStyle: "underline" }
+        settings: { foreground: muted, fontStyle: "underline" },
       },
       {
         scope: ["punctuation.definition.list"],
-        settings: { foreground: secondary }
+        settings: { foreground: secondary },
       },
       {
         scope: ["markup.quote", "punctuation.definition.quote"],
-        settings: { foreground: muted, fontStyle: "italic" }
-      }
-    ]
+        settings: { foreground: muted, fontStyle: "italic" },
+      },
+    ],
   };
 }
 
@@ -585,15 +668,15 @@ export function generateExtension(): GenerateResult {
       contributions.push({
         label: `${displayName} (${variant.labelMode})`,
         uiTheme: variant.uiTheme,
-        path: `./themes/${fileName}`
+        path: `./themes/${fileName}`,
       });
     }
   }
 
   const packageJson = readJson(packageTemplatePath);
   packageJson.contributes = {
-    ...(packageJson.contributes ?? {}),
-    themes: contributions
+    ...packageJson.contributes,
+    themes: contributions,
   };
   writeJson(path.join(distDir, "package.json"), packageJson);
   copyIfExists(path.join(process.cwd(), "README.md"), path.join(distDir, "README.md"));
@@ -611,11 +694,16 @@ async function main() {
   console.log(`Reading Morphos catalog from git: ${source}`);
 
   const result = generateExtension();
-  console.log(`Generated ${result.contributions.length} VS Code themes from ${result.systems.length} Morphous systems.`);
+  console.log(
+    `Generated ${result.contributions.length} VS Code themes from ${result.systems.length} Morphous systems.`,
+  );
   console.log(`Output: ${path.relative(process.cwd(), result.distDir)}`);
 }
 
-if (process.argv[1] && (process.argv[1].endsWith("generate.ts") || process.argv[1].endsWith("generate.js"))) {
+if (
+  process.argv[1] &&
+  (process.argv[1].endsWith("generate.ts") || process.argv[1].endsWith("generate.js"))
+) {
   main().catch((err) => {
     console.error(err instanceof Error ? err.message : err);
     process.exit(1);

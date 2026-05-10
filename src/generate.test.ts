@@ -8,7 +8,7 @@ import {
   hslToHex,
   resolveThemePalette,
   themeDisplayName,
-  type MorphousSystem
+  type MorphousSystem,
 } from "./generate";
 
 const hexColorPattern = /^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/;
@@ -27,17 +27,29 @@ function assertThemeFile(file: string) {
   assert.ok(theme.colors, `${file} should have colors`);
   assert.ok(Array.isArray(theme.tokenColors), `${file} should have tokenColors`);
   assert.ok(["dark", "light"].includes(theme.type), `${file} should have a valid type`);
-  assert.strictEqual(typeof theme.colors["editor.background"], "string", `${file} should define editor.background`);
+  assert.strictEqual(
+    typeof theme.colors["editor.background"],
+    "string",
+    `${file} should define editor.background`,
+  );
   assert.ok(
     hexColorPattern.test(theme.colors["editor.background"]),
-    `${file} editor.background should be a hex color`
+    `${file} editor.background should be a hex color`,
   );
 }
 
 function testColorConversion() {
-  assert.deepStrictEqual(hexToHsl("#FF0000"), { h: 0, s: 100, l: 50 }, "Red conversion to HSL failed");
+  assert.deepStrictEqual(
+    hexToHsl("#FF0000"),
+    { h: 0, s: 100, l: 50 },
+    "Red conversion to HSL failed",
+  );
   assert.strictEqual(hslToHex(0, 100, 50), "#FF0000", "Red conversion back to HEX failed");
-  assert.deepStrictEqual(hexToHsl("#00FF00"), { h: 120, s: 100, l: 50 }, "Green conversion to HSL failed");
+  assert.deepStrictEqual(
+    hexToHsl("#00FF00"),
+    { h: 120, s: 100, l: 50 },
+    "Green conversion to HSL failed",
+  );
   assert.strictEqual(hslToHex(120, 100, 50), "#00FF00", "Green conversion back to HEX failed");
 }
 
@@ -55,8 +67,8 @@ function testRoleFallbacks() {
       { role: "Warning", hex: "#DD5533" },
       { role: "Card", hex: "#EEEEEE" },
       { role: "Quiet", hex: "#888888" },
-      { role: "Night", hex: "#05070A" }
-    ]
+      { role: "Night", hex: "#05070A" },
+    ],
   };
 
   const palette = resolveThemePalette(system);
@@ -80,10 +92,24 @@ function testGeneratedExtension() {
   const pkg = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
   const expectedThemeCount = result.systems.length * 4;
 
-  assert.strictEqual(result.contributions.length, expectedThemeCount, "Expected four variants per system");
-  assert.strictEqual(pkg.contributes.themes.length, expectedThemeCount, "Generated package contributes count mismatch");
-  assertUnique(pkg.contributes.themes.map((theme: { label: string }) => theme.label), "Theme labels");
-  assertUnique(pkg.contributes.themes.map((theme: { path: string }) => theme.path), "Theme paths");
+  assert.strictEqual(
+    result.contributions.length,
+    expectedThemeCount,
+    "Expected four variants per system",
+  );
+  assert.strictEqual(
+    pkg.contributes.themes.length,
+    expectedThemeCount,
+    "Generated package contributes count mismatch",
+  );
+  assertUnique(
+    pkg.contributes.themes.map((theme: { label: string }) => theme.label),
+    "Theme labels",
+  );
+  assertUnique(
+    pkg.contributes.themes.map((theme: { path: string }) => theme.path),
+    "Theme paths",
+  );
 
   const files = fs.readdirSync(result.themesDir).filter((file) => file.endsWith(".json"));
   assert.strictEqual(files.length, expectedThemeCount, "Generated theme file count mismatch");
